@@ -1,6 +1,6 @@
 import json
 import os
-
+from flask import Flask
 from dotenv import load_dotenv
 load_dotenv()
 from dash import Input, Output, Dash, State, dash_table, dcc, html
@@ -37,8 +37,8 @@ horizon_options = [{"label":str(i), "value":i} for i in set([f.horizon for i, f 
 external_stylesheets = [dbc.themes.LUX]
 load_figure_template("lux")
 
-
-app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = Flask(__name__)
+app = Dash(server=server,  external_stylesheets=external_stylesheets)
 app.title = "Прогнозирование макроэкономических переменных"
 
 table = dash_table.DataTable(
@@ -185,6 +185,6 @@ def show_plot(idx):
 
 
 if __name__ == '__main__':
-    app.run_server(port = 8050, debug=True)
+    app.run_server()
 
 

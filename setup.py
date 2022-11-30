@@ -12,8 +12,6 @@ setup(
     author='Mikhail Gareev',
     # author_email='foomail@foo.example',
     # url="http://www.foopackage.example/",
-    packages=['rmen'],  #same as name
+    packages=['rmen']  #same as name
     # install_requires=['wheel', 'bar', 'greek'], #external packages as dependencies
-    scripts=[
-        'app/app.py']
 )

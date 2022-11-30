@@ -8,14 +8,14 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
 from matplotlib.colors import to_rgb
-
+from typing import List
 from rmen.variable import Variable
 from rmen.forecast import Forecast
 from rmen.utils import check_variable, quarter_formatter, formatter
 
 class Statistic():
     @check_variable
-    def __init__(self, variable:Variable, forecast:list[Forecast], left_bound:str="2015-01-01"):
+    def __init__(self, variable:Variable, forecast:List[Forecast], left_bound:str="2015-01-01"):
         self.variable = variable
         self.forecast = forecast
         self.left_bound = left_bound
