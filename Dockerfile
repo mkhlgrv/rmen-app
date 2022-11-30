@@ -6,7 +6,7 @@ COPY rmen ./rmen
 COPY assets ./assets
 COPY app ./app
 # хранилище результатов парсинга
-RUN -v C:/Users/migareev/Documents/rmedb_data/data:assets/data
+RUN -v ~/science/rmedb_data/data:assets/data
 
 EXPOSE 8050
 
