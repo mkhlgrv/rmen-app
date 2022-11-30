@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS value_index_ticker ON value (ticker, dt);

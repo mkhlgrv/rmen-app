@@ -1,0 +1,1 @@
+DROP VIEW IF EXISTS date_range;

@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/assets/storage/rmedb_storage.db
+.idea/dataSources .idea/dataSources.local.xml .idea/dataSources.xml .idea/misc.xml .idea/modules.xml .idea/rmen-app.iml .idea/vcs.xml .idea/workspace.xml
+.idea/dataSources .idea/dataSources.local.xml .idea/dataSources.xml .idea/misc.xml .idea/modules.xml .idea/rmen-app.iml .idea/vcs.xml .idea/workspace.xml
+
+.idea/*
