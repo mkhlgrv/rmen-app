@@ -9,6 +9,7 @@ from rmen.utils import check_forecast_args, check_data, get_xid
 from rmen.utils import interim_storage_path as storage_path
 from rmen.variable import Variable
 from rmen.model import Model
+from rmen.logger import logger
 
 truncate_predictor = "DELETE FROM PREDICTOR;"
 insert_predictor = """INSERT INTO PREDICTOR
@@ -155,6 +156,7 @@ class Forecast:
                  , test_end_dt:str
                  , name: Optional[dict] = None
                  , desc: Optional[str] = None):
+        logger.info("Initializig Forecast")
         self.variable = variable
         self.model = model
         self.method = model.method
@@ -168,6 +170,7 @@ class Forecast:
         self.desc = desc
 
     def collect_data(self):
+        logger.info("Starting data collecting")
         ticker_lag = [(key, i) for key, item in self.predictor.items() for i in item]
         with sl.connect(storage_path) as conn:
             cursor = conn.cursor()
@@ -184,17 +187,19 @@ class Forecast:
             data["target__"] = np.where(data["target__"] <-100000, np.NaN,data["target__"])
             
             self.data = data
+        logger.info("Ending data collecting")
 
 
 
     def cut_data(self):
-
+        logger.info("Starting data cutting")
         self.data = self.data[(self.data.index >= self.train_start_dt) & (self.data.index <=  self.test_end_dt)]
         self.data = self.data.loc[:,(~self.data.isna().any())|(~get_xid(self.data))]
+        logger.info("Starting data cutting")
 
     @check_data
     def split_data(self):
-
+        logger.info("Starting data splitting")
         self.is_initial_window = self.data.index <  self.test_start_dt
 
         self.X, self.y = self.data.loc[:,get_xid(self.data)].to_numpy(), \
@@ -203,6 +208,7 @@ class Forecast:
         self.y_predict = np.empty_like(self.y)
 
         self.y_predict[:] = np.nan
+        logger.info("Ending data splitting")
 
 
 
@@ -218,8 +224,9 @@ class Forecast:
 
     def fit_in_loop(self):
         start, stop = sum(self.is_initial_window), len(self.data)
-
+        
         for step in range(start, stop):
+            logger.info(f"Model fitting: step {step}")
             self.fit_by_step(step)
 
     def get_metric(self):

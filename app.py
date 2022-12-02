@@ -26,8 +26,14 @@ help_text =  dcc.Markdown("""
  получите подробную информацию о конфигурации моделей в формате JSON.
 """)
 
-forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","forecast.pickle")
-with open(forecast_path, 'rb') as f:
+# forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","forecast.pickle")
+
+forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","final")
+avaliable_forecasts = os.listdir(forecast_path)
+last_forecast_path = os.path.join(forecast_path, max(avaliable_forecasts))
+
+
+with open(last_forecast_path, 'rb') as f:
     forecast_list = pickle.load(f)
 
 
@@ -69,7 +75,7 @@ metric = dash_table.DataTable(
         id='metric',
         columns=[
             {"name": label, "id": i, "type":"numeric", "format":percentage} for label,i
-                in zip(["Модель","R2", "RMSE", "MaxErr","MAE"],["model","R2", "RMSE", "MaxErr","MAE"])
+                in zip(["Модель","R2", "RMSE", "MaxError","MAE"],["model","R2", "RMSE", "MaxErr","MAE"])
         ],
         page_current= 0,
         page_size= 10
@@ -165,7 +171,7 @@ def show_table(idx):
         forecast = [forecast_list[i] for i in idx]
         stat = Statistic(forecast[0].variable, forecast)
         metrics = stat.show_metric()
-        names = ["model","R2", "RMSE", "MaxErr","MAE"]
+        names = ["model","R2", "RMSE", "MaxError","MAE"]
         return [{label: i for label, i in zip(names, row)} for row in metrics]
     else:
         raise PreventUpdate

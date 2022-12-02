@@ -8,7 +8,7 @@ import sqlite3 as sl
 import numpy as np
 from rmen.utils import interim_storage_path as storage_path
 from rmen.utils import generate_date_series
-from logger import logger
+from rmen.logger import logger
 
 logger.info("Initializing storage: starts")
 
