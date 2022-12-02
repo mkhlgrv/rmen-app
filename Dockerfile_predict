@@ -1,0 +1,20 @@
+FROM python:3.8
+
+COPY requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+COPY rmen ./rmen
+COPY setup.py ./setup.py
+COPY README.md ./README.md
+RUN pip install -e .
+
+COPY assets ./assets
+COPY predict.py ./predict.py
+# хранилище результатов парсинга
+VOLUME ~/science/rmedb_data/data:assets/data
+# хранилище для модели
+VOLUME ~/science/rmen-app/assets/data:assets/data
+
+ENV project_dir .
+ENV rmedb_storage ./assets/data
+
+CMD [ "python",  "predict.py"]

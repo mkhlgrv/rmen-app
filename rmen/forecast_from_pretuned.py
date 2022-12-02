@@ -36,14 +36,17 @@ def forecast_pipeline_pretuned():
     
     forecast_list = []
     for fi in os.listdir(tuned_path):
-        with open(os.path.join(save_dir, fi), "rb") as f:
+        with open(os.path.join(tuned_path, fi), "rb") as f:
             tuned_forecast = pickle.load(f)
         forecast = _init_from_tuned_(tuned_forecast)
         forecast.collect_data()
         forecast.cut_data()
         forecast.split_data()
         forecast.fit_in_loop()
+        forecast.get_metric()
         forecast_list.append(forecast)
 
     with open(final_path, "wb") as f:
         pickle.dump(forecast_list, f)
+if __name__ == '__main__':
+    forecast_pipeline_pretuned()
