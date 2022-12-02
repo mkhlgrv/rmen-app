@@ -116,8 +116,8 @@ deseasoned_shifted AS (
 SELECT
     ts.ticker || '__' || ts.lag AS ticker
     , date(val.dt, 'start of month',
-        (CASE WHEN sign(ts.shift * 12 / val.frequency +
-        ({horizon})* 12 /({frequency}))= 1 THEN '+' ELSE '-' END) 
+        (CASE WHEN (ts.shift * 12 / val.frequency +
+        ({horizon})* 12 /({frequency}))>=0 THEN '+' ELSE '-' END) 
         || abs(ts.shift * 12 / val.frequency +
         ({horizon})* 12 /({frequency}))
         || ' month') AS dt
@@ -176,6 +176,11 @@ class Forecast:
             cursor = conn.cursor()
             cursor.execute(truncate_predictor)
             cursor.executemany(insert_predictor, ticker_lag)
+            select_predictor_query = select_predictor.format(ticker = self.variable.ticker,
+                                                       horizon = self.horizon,
+                                                      freq = self.variable.freq,
+                                                      frequency = 4 if self.variable.freq == "q" else 12)
+            cursor.execute(select_predictor_query)
             data = pd.read_sql(select_predictor.format(ticker = self.variable.ticker,
                                                        horizon = self.horizon,
                                                       freq = self.variable.freq,

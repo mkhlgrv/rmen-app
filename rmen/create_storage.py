@@ -93,7 +93,7 @@ def update_storage():
         cursor.execute(delete_from_value)
         cursor.execute(delete_from_variable)
 
-        with open(metadata_path, "r") as f:
+        with open(metadata_path, "r", encoding='utf-8') as f:
             reader = csv.reader(f)
             next(reader, None)
             cursor.executemany(insert_variable, reader)

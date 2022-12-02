@@ -3,7 +3,7 @@ load_dotenv()
 from typing import Literal, Optional
 from sklearn.linear_model import ElasticNetCV
 from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
+#from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV

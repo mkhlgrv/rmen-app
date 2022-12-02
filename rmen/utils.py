@@ -31,7 +31,8 @@ def check_forecast_args(fun):
                 cursor.execute(f"SELECT ticker FROM VARIABLE")
                 tickers  = (i[0] for i in cursor.fetchall())
                 if not set(kwargs["predictor"].keys()).issubset(set(tickers)):
-                    raise IncorrectPredictorError(f'Predictor keys list is {kwargs["predictor"].keys()}')
+                    diff = set(kwargs["predictor"]).difference(set(tickers))
+                    raise IncorrectPredictorError(f'These predictors are not available in raw data: {diff}')
             if  ("variable" in kwargs) and ("train_start_dt" in kwargs):
                 if kwargs["train_start_dt"] < kwargs["variable"].start_dt:
                     raise IncorrectDtError(f'Train start date is {kwargs["train_start_dt"]}')

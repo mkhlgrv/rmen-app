@@ -10,7 +10,7 @@ RUN pip install -e .
 COPY assets ./assets
 COPY predict.py ./predict.py
 # хранилище результатов парсинга
-VOLUME ~/science/rmedb_data/data:assets/data
+VOLUME ~/science/rmedb_storage/data:assets/data
 # хранилище для модели
 VOLUME ~/science/rmen-app/assets/data:assets/data
 

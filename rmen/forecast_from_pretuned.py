@@ -5,6 +5,7 @@ from rmen.model import Model
 from rmen.forecast import Forecast
 from datetime import date
 import pickle
+from glob import glob
 from dateutil.relativedelta import relativedelta
 storage_path = os.path.join(os.getenv("project_dir"), "assets", "storage", "rmedb_storage.db")
 
@@ -35,8 +36,8 @@ def forecast_pipeline_pretuned():
                          f"{date.today().strftime(format = '%Y-%m-%d')}.pickle")
     
     forecast_list = []
-    for fi in os.listdir(tuned_path):
-        with open(os.path.join(tuned_path, fi), "rb") as f:
+    for fi in glob(tuned_path+'/*.pickle'):
+        with open(os.path.join(fi), "rb") as f:
             tuned_forecast = pickle.load(f)
         forecast = _init_from_tuned_(tuned_forecast)
         forecast.collect_data()

@@ -8,8 +8,8 @@ COPY README.md ./README.md
 RUN pip install -e .
 COPY assets ./assets
 COPY app.py ./app.py
-# хранилище результатов парсинга
-# VOLUME ~/science/rmedb_data/data:assets/data
+# хранилище моделей
+# VOLUME ~/science/rmen-app/assets/model/final:assets/model/final
 
 ENV project_dir .
 
