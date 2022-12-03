@@ -15,9 +15,7 @@ logger.info("Initializing storage: starts")
 rmedb_storage_path = os.getenv("rmedb_storage")
 # TODO add to R rmedb::download this code to write metadata:
 # TODO write.csv(rmedb::get.variables.df(), file = "metadata.csv", row.names = FALSE)
-
 metadata_path = os.path.join(rmedb_storage_path, "metadata.csv")
-
 sql_path = os.path.join(os.getenv("project_dir"), "assets", "sql")
 
 with open(os.path.join(sql_path, "drop_variable.sql")) as f:

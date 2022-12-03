@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from dash import Input, Output, Dash, State, dash_table, dcc, html
 import pickle
+from glob import glob
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 from dash.exceptions import PreventUpdate
@@ -29,8 +30,8 @@ help_text =  dcc.Markdown("""
 # forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","forecast.pickle")
 
 forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","final")
-avaliable_forecasts = os.listdir(forecast_path)
-last_forecast_path = os.path.join(forecast_path, max(avaliable_forecasts))
+avaliable_forecasts = glob(forecast_path + '/*.pickle')
+last_forecast_path = max(avaliable_forecasts)
 
 
 with open(last_forecast_path, 'rb') as f:
