@@ -30,13 +30,16 @@ variables = [Variable(target) for target in targets]
 
 methods = [Model(method = "ElasticNet", name = {"rus":"EN"},
                 params = {"l1_ratio":[i for i in np.arange(0.1,1.,.2)],
+                          "n_alphas" : [100, 500],
+                           "eps":[0.01, 0.001, 0.0001, 0.00001],
                           "selection":["random"]}),
-           Model(method = "ElasticNet", name = {"rus":"LASSO"},
-                 params = {"l1_ratio":[0.95],
+           Model(method = "Lasso", name = {"rus":"LASSO"},
+                 params = {"n_alphas" : [100, 500],
+                           "eps":[0.01, 0.001, 0.0001, 0.00001],
                            "selection":["random"]}),
-           Model(method = "ElasticNet", name = {"rus":"Ridge"},
-                 params = {"l1_ratio":[0.05],
-                           "selection":["random"]}),
+#            Model(method = "ElasticNet", name = {"rus":"Ridge"},
+#                  params = {"l1_ratio":[0.05],
+#                            "selection":["random"]}),
            Model(method= "RandomForest", name = {"rus":"RF/N=100"},
                  params={"n_estimators":[100],
                          "criterion":["squared_error"],
@@ -83,7 +86,7 @@ predictors = [{"name":"Росстат", "predictor":predictor_rosstat},
 def initialize_in_loop():
     forecast_list = []
     for variable in variables:
-        for method in methods[3:5]:
+        for method in methods[:2]:
             for predictor in predictors:
                 for horizon in [-1, 0]:
                     forecast_list.append(Forecast(variable = variable
@@ -108,13 +111,14 @@ def forecast_pipeline(forecast:Forecast, i:int, save_dir:str, debug:bool=False):
     with open(os.path.join(save_dir, f"{i}.pickle"), "wb") as f:
         pickle.dump(forecast, f)
         
-        
-forecast_list = initialize_in_loop()
-[forecast_pipeline(forecast, i, save_dir, ) for i, forecast in enumerate(forecast_list)]
+if __name__ == "__main__":
+    
+    forecast_list = initialize_in_loop()
+    [forecast_pipeline(forecast, i, save_dir, ) for i, forecast in enumerate(forecast_list)]
 
-forecast_list_out = []
-for fi in os.listdir(save_dir):
-    with open(os.path.join(save_dir, fi), "rb") as f:
-        forecast_list_out.append(pickle.load(f))
-with open(os.path.join(os.getenv("project_dir"), "assets", "model", f"{str(date.today())}.pickle"), "wb") as f:
-    pickle.dump(forecast_list_out, f)
+    forecast_list_out = []
+    for fi in os.listdir(save_dir):
+        with open(os.path.join(save_dir, fi), "rb") as f:
+            forecast_list_out.append(pickle.load(f))
+    with open(os.path.join(os.getenv("project_dir"), "assets", "model", f"{str(date.today())}.pickle"), "wb") as f:
+        pickle.dump(forecast_list_out, f)

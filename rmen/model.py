@@ -1,12 +1,12 @@
 from dotenv import load_dotenv
 load_dotenv()
 from typing import Literal, Optional
-from sklearn.linear_model import ElasticNetCV
+from sklearn.linear_model import ElasticNetCV, LassoCV
 from sklearn.ensemble import RandomForestRegressor
 #from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
-from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV, GridSearchCV, ParameterGrid
 from rmen.logger import logger, sklearn_verbose
 import os
 
@@ -21,11 +21,22 @@ class Model:
         self.name = name
         self.params = params
         self.desc = desc
-        self.get_estimator(best_estimator)
-    def get_estimator(self, best_estimator):
-        if best_estimator is None:
+        self.best_estimator = best_estimator
+        self._get_niter_()
+        self._get_estimator_()
+    def _get_niter_(self):
+        param_grid_len = len(list(ParameterGrid(self.params)))
+        self.n_iter = min(500, param_grid_len)
+        
+    def _get_estimator_(self):
+        if self.best_estimator is not None:
+            regressor = self.best_estimator
+            
+        else:
             if self.method == "ElasticNet":
                 regressor = ElasticNetCV()
+            elif self.method == "Lasso":
+                regressor = LassoCV()
             elif self.method == "RandomForest":
                 regressor = RandomForestRegressor()
             elif self.method == "XGB":
@@ -33,12 +44,11 @@ class Model:
 
             regressor = RandomizedSearchCV(estimator = regressor,
                                param_distributions = self.params,
-                               n_iter = 500,
-                               cv = 3,
+                               n_iter = self.n_iter,
+                               cv = 5,
                                verbose=sklearn_verbose,
                                random_state=10)
-        else:
-            regressor = best_estimator
+            
 
         self.estimator = Pipeline([('scaler', StandardScaler()),
                           ('regressor', regressor)])
