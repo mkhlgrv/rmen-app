@@ -8,14 +8,11 @@ COPY README.md ./README.md
 RUN pip install -e .
 
 COPY assets ./assets
-# хранилище результатов парсинга
-RUN mkdir -p /var/rmedb_storage
-# COPY /home/mkhlgrv/science/rmedb_storage/data ./assets/data
 COPY predict.py ./predict.py
 # хранилище для модели
 VOLUME ~/science/rmen-app/assets/model:assets/model
 
 ENV project_dir .
-ENV rmedb_storage /var/rmedb_storage
+ENV rmedb_storage .assets/raw
 
 CMD [ "python",  "predict.py"]
