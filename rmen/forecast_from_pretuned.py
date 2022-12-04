@@ -8,6 +8,8 @@ import pickle
 from glob import glob
 from dateutil.relativedelta import relativedelta
 storage_path = os.path.join(os.getenv("project_dir"), "assets", "storage", "rmedb_storage.db")
+tuned_path = os.path.join(os.getenv("project_dir"), "assets", "model", 'tuned')
+final_path = os.path.join(os.getenv("model_dir"),"final",f"{date.today().strftime(format = '%Y-%m-%d')}.pickle")
 
 
 def _init_from_tuned_(tuned_forecast):
@@ -28,12 +30,6 @@ def _init_from_tuned_(tuned_forecast):
     return forecast
 
 def forecast_pipeline_pretuned():
-    tuned_path = os.path.join(os.getenv("project_dir"), "assets", "model", 'tuned')
-    final_path = os.path.join(os.getenv("project_dir"),
-                         "assets",
-                         "model",
-                        "final",
-                         f"{date.today().strftime(format = '%Y-%m-%d')}.pickle")
     
     forecast_list = []
     for fi in glob(tuned_path+'/*.pickle'):

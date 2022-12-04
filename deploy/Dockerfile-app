@@ -6,13 +6,13 @@ COPY rmen ./rmen
 COPY setup.py ./setup.py
 COPY README.md ./README.md
 RUN pip install -e .
-
 COPY assets ./assets
-COPY predict.py ./predict.py
-# хранилище для модели
-VOLUME ~/science/rmen-app/assets/model:assets/model
+COPY app.py ./app.py
+# хранилище моделей
+# VOLUME assets/model/final
 
 ENV project_dir .
-ENV rmedb_storage .assets/raw
 
-CMD [ "python",  "predict.py"]
+EXPOSE 8050
+
+CMD [ "gunicorn", "--workers=1", "--threads=1", "-b 0.0.0.0:8050", "app:server"]

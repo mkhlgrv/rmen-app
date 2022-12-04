@@ -25,13 +25,16 @@ class Model:
         self._get_niter_()
         self._get_estimator_()
     def _get_niter_(self):
-        param_grid_len = len(list(ParameterGrid(self.params)))
-        self.n_iter = min(500, param_grid_len)
-        
+        if self.best_estimator is None:
+            param_grid_len = len(list(ParameterGrid(self.params)))
+            self.n_iter = min(500, param_grid_len)
+        else:
+            self.n_iter = 1
+
     def _get_estimator_(self):
         if self.best_estimator is not None:
             regressor = self.best_estimator
-            
+
         else:
             if self.method == "ElasticNet":
                 regressor = ElasticNetCV()

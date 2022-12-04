@@ -14,12 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 #RUN R -e 'install.packages("ggplot2")'
 #RUN R -e 'install.packages("DT")'
 RUN R -e 'install.packages("devtools")'
-RUN R -e "devtools::install_github(c('mkhlgrv/rmedb'))"
+RUN R -e "devtools::install_github(c('mkhlgrv/rmedb@v0.0.1'))"
 RUN mkdir -p /var/rmedb_storage
+RUN mkdir -p /var/rmedb_storage/data
 
 # хранилище результатов парсинга
-VOLUME assets/raw:/var/rmedb_storage/data
+VOLUME /var/rmedb_storage/data
 
 ENV directory /var/rmedb_storage
 
-CMD ["R", "rmedb::download()"]
+CMD ["R","-e", "rmedb::download()"]
