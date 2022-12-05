@@ -120,5 +120,5 @@ if __name__ == "__main__":
     for fi in os.listdir(save_dir):
         with open(os.path.join(save_dir, fi), "rb") as f:
             forecast_list_out.append(pickle.load(f))
-    with open(os.path.join(os.getenv("project_dir"), "assets", "model", f"{str(date.today())}.pickle"), "wb") as f:
+    with open(os.path.join(os.getenv("project_dir"), "assets", "model","tuned", f"{str(date.today())}.pickle"), "wb") as f:
         pickle.dump(forecast_list_out, f)
