@@ -12,7 +12,7 @@ import os
 
 class Model:
     def __init__(self
-                 , method : Literal["ElasticNet","RandomForest","XGB"]
+                 , method : Literal["ElasticNet","RandomForest","XGB", "Lasso"]
                  , name : dict
                  , params : dict
                  , desc : Optional[str] = None
@@ -42,8 +42,8 @@ class Model:
                 regressor = LassoCV()
             elif self.method == "RandomForest":
                 regressor = RandomForestRegressor()
-            elif self.method == "XGB":
-                regressor = XGBRegressor()
+            # elif self.method == "XGB":
+            #     regressor = XGBRegressor()
 
             regressor = RandomizedSearchCV(estimator = regressor,
                                param_distributions = self.params,
