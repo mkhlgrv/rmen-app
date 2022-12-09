@@ -106,8 +106,6 @@ def forecast_pipeline(forecast:Forecast, i:int, save_dir:str, debug:bool=False):
     forecast.split_data()
     forecast.fit_in_loop()
     forecast.get_metric()
-    if not debug:
-        forecast.model = None          
     with open(os.path.join(save_dir, f"{i}.pickle"), "wb") as f:
         pickle.dump(forecast, f)
         

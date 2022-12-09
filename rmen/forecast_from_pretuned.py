@@ -13,7 +13,6 @@ final_path = os.path.join(os.getenv("model_dir"),"final",f"{date.today().strftim
 
 
 def _init_from_tuned_(tuned_forecast):
-    
     tuned_model = Model(method= tuned_forecast.model.method,
                         name = tuned_forecast.model.name,
                         params = tuned_forecast.model.estimator[1].best_params_,
