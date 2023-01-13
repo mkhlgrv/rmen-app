@@ -32,8 +32,9 @@ def forecast_pipeline_pretuned():
     
     forecast_list = []
     last_tuned = max(glob(tuned_path+'/*.pickle'))
-    with open(os.path.join(last_tuned), "rb") as f:
+    with open(last_tuned, "rb") as f:
         tuned_forecasts = pickle.load(f)
+    print(len(tuned_forecasts))
     for tuned_forecast in tuned_forecasts:
         forecast = _init_from_tuned_(tuned_forecast)
         forecast.collect_data()

@@ -25,6 +25,7 @@ help_text =  dcc.Markdown("""
 - Получите псевдоисторический вневыборочный прогноз, значения метрик качества моделей и предсказания на актуальную дату.
 - Скачайте Excel-файл cо значениями прогноза для выбранных моделей или
  получите подробную информацию о конфигурации моделей в формате JSON.
+[Подробное описание процесса сбора данных и построения моделей.](https://www.vopreco.ru/jour/article/view/4093)
 """)
 
 # forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","forecast.pickle")
@@ -33,10 +34,10 @@ forecast_path = os.path.join(os.getenv("project_dir"), "assets","model","final")
 avaliable_forecasts = glob(forecast_path + '/*.pickle')
 last_forecast_path = max(avaliable_forecasts)
 
-
+print(avaliable_forecasts)
+print(last_forecast_path)
 with open(last_forecast_path, 'rb') as f:
     forecast_list = pickle.load(f)
-
 
 variable_options = [{"label":i, "value":i} for i in set([f.variable.name["rus"] for i, f in enumerate(forecast_list)])]
 horizon_options = [{"label":str(i), "value":i} for i in set([f.horizon for i, f in enumerate(forecast_list)])]
@@ -76,7 +77,7 @@ metric = dash_table.DataTable(
         id='metric',
         columns=[
             {"name": label, "id": i, "type":"numeric", "format":percentage} for label,i
-                in zip(["Модель","R2", "RMSE", "MaxError","MAE"],["model","R2", "RMSE", "MaxErr","MAE"])
+                in zip(["Модель","R2", "RMSE", "MaxError","MAE"],["model","R2", "RMSE", "MaxError","MAE"])
         ],
         page_current= 0,
         page_size= 10

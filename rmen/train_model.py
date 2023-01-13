@@ -17,9 +17,10 @@ import asyncio
 import time
 import pickle
 from pathlib import Path
+from rmen.logger import logger
 
 storage_path = os.path.join(os.getenv("project_dir"), "assets", "storage", "rmedb_storage.db")
-save_dir = os.path.join(os.getenv("project_dir"), "assets", "model", str(date.today()))
+save_dir = os.path.join(os.getenv("project_dir"), "assets", "model", "2022-12-21"))
 Path(save_dir).mkdir(exist_ok=True)
 
 
@@ -101,18 +102,23 @@ def initialize_in_loop():
     return forecast_list
 
 def forecast_pipeline(forecast:Forecast, i:int, save_dir:str, debug:bool=False):
-    forecast.collect_data()
-    forecast.cut_data()
-    forecast.split_data()
-    forecast.fit_in_loop()
-    forecast.get_metric()
-    with open(os.path.join(save_dir, f"{i}.pickle"), "wb") as f:
-        pickle.dump(forecast, f)
+    logger.info(f'Step {i}')
+    try:
+        logger.info(forecast)
+        forecast.collect_data()
+        forecast.cut_data()
+        forecast.split_data()
+        forecast.fit_in_loop()
+        forecast.get_metric()
+        with open(os.path.join(save_dir, f"{i}.pickle"), "wb") as f:
+            pickle.dump(forecast, f)
+    except Exception as e:
+        logger.error(e)
         
 if __name__ == "__main__":
     
-    forecast_list = initialize_in_loop()
-    [forecast_pipeline(forecast, i, save_dir, ) for i, forecast in enumerate(forecast_list)]
+  # forecast_list = initialize_in_loop()
+  # [forecast_pipeline(forecast, i, save_dir, ) for i, forecast in enumerate(forecast_list)]
 
     forecast_list_out = []
     for fi in os.listdir(save_dir):
